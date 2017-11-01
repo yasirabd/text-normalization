@@ -1,13 +1,13 @@
-import mysql.connector
+import _mysql
 from modulenorm.modNormalize import normalize
 from modulenorm.modTokenizing import tokenize
 
 # membuka koneksi database
-conn = mysql.connector.connect(
+conn = _mysql.connect(
 	user="root",
 	password="",
 	host="127.0.0.1",
-	database="twittertesis"
+	db="twittertesis"
 	)
 cur = conn.cursor()
 
@@ -48,7 +48,7 @@ for row in result:
 	output.write(str(text_norm))
 	output.write('\n')
 	output.close()
-	
+
 	# print(no)
 	no += 1
 

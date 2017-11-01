@@ -1,26 +1,25 @@
-import mysql.connector
+import _mysql
 from modulenorm.modNormalize import normalize
 from modulenorm.modTokenizing import tokenize
 
 # membuka koneksi database
-conn = mysql.connector.connect(
+db = _mysql.connect(
 	user="root",
-	password="",
+	passwd="",
 	host="127.0.0.1",
-	database="twitterdata"
+	db="twitterdata"
 	)
-cur = conn.cursor()
 
 # mengambil data
-cur.execute("SELECT * FROM dataset")
-result = cur.fetchall()
-# print(result)
+db.query("SELECT * FROM dataset")
+result = db.store_result()
+# print(result.fetch_row())
 
 # menampilkan
 no = 1
-for row in result:
-	text = row[6].encode("utf-8")
-	text_decode = str(text.decode("utf-8"))
+for row in result.fetch_row(maxrows=0):
+	text = row[6]
+	text_decode = str(text.decode('utf-8', 'ignore').encode('cp850', 'replace').decode('cp850'))
 
 	usenorm = normalize()
 	text_norm = usenorm.enterNormalize(text_decode) # normalisasi enter, 1 revw 1 baris
@@ -48,10 +47,10 @@ for row in result:
 	output.write(str(text_norm))
 	output.write('\n')
 	output.close()
-	
+
 	# print(no)
 	no += 1
 
 # tutup koneksi
-cur.close()
-conn.close()
+# cur.close()
+db.close()
